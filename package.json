@@ -7,22 +7,22 @@
     "node": "^10.18.1"
   },
   "dependencies": {
-    "del": "^5.1.0",
     "digitalmarketplace-govuk-frontend": "github:alphagov/digitalmarketplace-govuk-frontend#pre-release-v3.0.0-govuk-frontend-3-r4",
     "govuk-frontend": "^3.9.1",
-    "gulp": "^4.0.2",
-    "gulp-filelog": "0.4.1",
-    "gulp-include": "^2.4.1",
-    "gulp-sass": "^4.0.2",
-    "gulp-shell": "^0.7.1",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-uglify": "^3.0.2"
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.32.8",
+    "uglify-js": "^3.13.1"
   },
   "scripts": {
-    "frontend-build:development": "gulp build:development",
-    "frontend-build:production": "gulp build:production",
-    "frontend-build:watch": "gulp watch",
-    "test": "standard \"gulpfile.js\""
+    "frontend-build:development": "build",
+    "frontend-build:production": "build",
+    "clean": "rm -rf app/static/* && mkdir -p app/static/{fonts,images,javascripts,stylesheets,svg}",
+    "build": "run-s clean copy-assets compile",
+    "compile": "run-p compile-js compile-css",
+    "compile-js": "uglifyjs app/assets/javascripts/application.js --mangle --compress --source-map --output app/static/javascripts/application.js",
+    "compile-css": "sass --load-path=app/assets/scss --load-path=node_modules/govuk-frontend --load-path=. app/assets/scss/application.scss app/static/stylesheets/application.css",
+    "copy-assets": "cp -r node_modules/govuk-frontend/govuk/assets/ app/assets/images app/assets/svg app/static/",
+    "test": "standard gulpfile.js"
   },
   "devDependencies": {
     "jest": "^25.1.0",
